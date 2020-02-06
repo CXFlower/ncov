@@ -1,12 +1,12 @@
 import json
 import os
+import threading
 import time
 from json import JSONDecodeError
 
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-
 
 def get_overall_informaiton():
     session = requests.session()
@@ -69,34 +69,49 @@ def overall_parser(overall_information):
         print(jerr.__str__())
         return None
 
+def record_overall_information():
+
+    if not hasattr(record_overall_information, 'count'):
+        record_overall_information.count = 0
+
+    header = True
+    now_time_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+
+    overall_information = get_overall_informaiton()
+    overall_information = overall_parser(overall_information)
+    if overall_information is None:
+        return
+    df = pd.DataFrame.from_dict(overall_information, orient='index', dtype=None, columns=None)
+    df = df.transpose()
+    file_path = 'DXYOverall.csv'
+    if os.path.exists(file_path):
+        header = False
+    else:
+        header = True
+    df.to_csv(
+        path_or_buf=file_path,
+        header=header,
+        index=False, encoding='utf_8',
+        mode="a"
+    )
+    record_overall_information.count += 1
+    print(now_time_str + " 完成一次采集！数据量：" + str(record_overall_information.count))
+
+
+def record_task():
+    delay_time = 30 * 60
+    timer = threading.Timer(delay_time, record_task)
+    timer.start()
+    record_overall_information()
+
 
 if __name__ == '__main__':
     print("疫情实时数据采集器启动，半小时进行采集一次！")
-    header = True
-    sum = 0
     while True:
         now_time_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         if now_time_str.find(":30:00") != -1 or now_time_str.find(":00:00") != -1:
-        # if True:
-            overall_information = get_overall_informaiton()
-            overall_information = overall_parser(overall_information)
-            if overall_information is None:
-                continue
-            df = pd.DataFrame.from_dict(overall_information, orient='index', dtype=None, columns=None)
-            df = df.transpose()
-            file_path = 'DXYOverall.csv'
-            if os.path.exists(file_path):
-                header = False
-            else:
-                header = True
-            df.to_csv(
-                path_or_buf=file_path,
-                header=header,
-                index=False, encoding='utf_8_sig',
-                mode="a"
-            )
-            sum = sum + 1
-            print(now_time_str + " 完成一次采集！数据量：" + str(sum))
-        time.sleep(0.9)
-print()
+            break
+    timer = threading.Timer(0, record_task)
+    timer.start()
+
 

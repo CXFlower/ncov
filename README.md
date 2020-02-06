@@ -18,7 +18,15 @@ pip install pandas <br/>
 pip install bs4 <br/>
 python ncov <br/>
 
+## 更新日志
+* 2020年2月6日更新 <br/>
+1. 修改定时方式，使用定时器实现
+2. 去除DXYOverall.csv文件内的重复数据
+3. 数据记录从**2020-02-02 01:30:02**到至今
+4. 修复有时导出记录重复的bug
 
+<br/>
 
-
+* 2020年2月5日更新 <br/>
+1. 基础功能实现，github建库
 
