@@ -1,2 +1,24 @@
-# ncov
-全国肺炎疫情确诊人数采集器，数据来自丁香园。
+# 全国肺炎疫情确诊人数采集器
+## 声明
+本数据采集器修改自github项目：
+[2019新型冠状病毒疫情实时爬虫](https://github.com/BlankerL/DXY-2019-nCoV-Crawler)
+<br/>数据格式与其兼容：
+[2019新型冠状病毒疫情时间序列数据仓库](https://github.com/BlankerL/DXY-2019-nCoV-Data)
+<br/>数据来自于[丁香园](https://ncov.dxy.cn/ncovh5/view/pneumonia)。
+
+<br/>由于在武汉被困太久纯粹无聊而写。
+
+<br/>只采集了**全国的确诊人数**数据，保存为csv文件，数据半个小时采集一次，最后一列为时间戳。
+<br/>csv文件跟ncov.py在同一目录。
+
+
+## 使用方法
+安装python3 <br/>
+pip install pandas <br/>
+pip install bs4 <br/>
+python ncov <br/>
+
+
+
+
+
